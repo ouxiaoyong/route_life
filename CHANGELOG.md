@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * update README.md
+
+## 0.0.4
+
+* add supports platforms

@@ -3,11 +3,16 @@ if you wan to listen route lifecycle in widget, this is a way.
 
 ## Usage
 
-1.set navigatorObservers
+1.import route_life.dart
 
 ```dart
 import 'package:route_life/route_life.dart';
 
+```
+
+2.set navigatorObservers
+
+```dart
 RouteLifeObserver routeLifeObserver = RouteLifeObserver();
 
 MaterialApp(
@@ -16,7 +21,7 @@ MaterialApp(
       ],
     );
 ```
-2. with RouteLifeMixin or AppLifeMixin
+3. with RouteLifeMixin or AppLifeMixin
 
 ```dart
 class _GamePageState extends State<GamePage> with RouteLifeMixin,AppLifeMixin{
