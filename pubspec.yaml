@@ -2,7 +2,6 @@ name: route_life
 description: a plugin for listen route lifecycle in widget.
 version: 0.0.4
 homepage: https://github.com/ouxiaoyong/route_life/
-publish_to: https://pub.dartlang.org
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
