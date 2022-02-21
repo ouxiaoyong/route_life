@@ -1,3 +1,7 @@
 ## 0.0.1
 
-* update first version
+* create project
+
+## 0.0.2
+
+* update changelog
