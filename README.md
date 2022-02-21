@@ -6,6 +6,8 @@ if you wan to listen route lifecycle in widget, this is a way.
 1.set navigatorObservers
 
 ```dart
+import 'package:route_life/route_life.dart';
+
 RouteLifeObserver routeLifeObserver = RouteLifeObserver();
 
 MaterialApp(

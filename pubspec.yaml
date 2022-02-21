@@ -1,6 +1,6 @@
 name: route_life
-description: A new Flutter project.
-version: 0.0.2
+description: a plugin for listen route lifecycle in widget.
+version: 0.0.3
 homepage: https://github.com/ouxiaoyong/route_life/
 
 environment:
