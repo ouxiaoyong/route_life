@@ -13,3 +13,7 @@
 ## 0.0.4
 
 * add supports platforms
+
+## 1.0.0
+
+* add supports platforms

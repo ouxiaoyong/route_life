@@ -1,6 +1,6 @@
 name: route_life
 description: a plugin for listen route lifecycle in widget.
-version: 0.0.4
+version: 1.0.0
 homepage: https://github.com/ouxiaoyong/route_life/
 
 environment:
@@ -21,13 +21,14 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-platforms:
-  android:
-  ios:
-  linux:
-  macos:
-  web:
-  windows:
+  plugin:
+    platforms:
+      android:
+      ios:
+      linux:
+      macos:
+      web:
+      windows:
 
   # To add assets to your package, add an assets section, like this:
   # assets:
