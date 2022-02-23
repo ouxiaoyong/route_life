@@ -16,4 +16,4 @@
 
 ## 1.0.0
 
-* add supports platforms
+* override didReplace didRemove 

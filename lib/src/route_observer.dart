@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class RouteLifeObserver<R extends Route<dynamic>> extends NavigatorObserver {
   final Map<R, Set<RouteAware>> _listeners = <R, Set<RouteAware>>{};
-
+  final List<Route<dynamic>> routes = [];
   /// Subscribe [routeAware] to be informed about changes to [route].
   ///
   /// Going forward, [routeAware] will be informed about qualifying changes
@@ -11,8 +11,31 @@ class RouteLifeObserver<R extends Route<dynamic>> extends NavigatorObserver {
   void subscribe(RouteAware routeAware, R route) {
     final Set<RouteAware> subscribers = _listeners.putIfAbsent(route, () => <RouteAware>{});
     if (subscribers.add(routeAware)) {
-      routeAware.didPush();
+      if(route.isActive){
+        routeAware.didPush();
+      }
+
+      if(routes.last != route){
+        var next = _findNextRoute(route);
+        if(next != null){
+          routeAware.didPushNext(next);
+        }
+      }
     }
+  }
+
+  Route<dynamic>? _findNextRoute(Route<dynamic> route){
+    if(routes.isEmpty){
+      return null;
+    }
+    int index = routes.indexOf(route);
+    if(index < 0){
+      return null;
+    }
+    if(routes.length <= index + 1){
+      return null;
+    }
+    return routes[index +1];
   }
 
   /// Unsubscribe [routeAware].
@@ -34,6 +57,7 @@ class RouteLifeObserver<R extends Route<dynamic>> extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    routes.remove(route);
     if (route is R && previousRoute is R) {
       final List<RouteAware>? previousSubscribers = _listeners[previousRoute]?.toList();
 
@@ -42,25 +66,70 @@ class RouteLifeObserver<R extends Route<dynamic>> extends NavigatorObserver {
           routeAware.didPopNext(route);
         }
       }
-
-      final List<RouteAware>? subscribers = _listeners[route]?.toList();
-
-      if (subscribers != null) {
-        for (final RouteAware routeAware in subscribers) {
-          routeAware.didPop();
-        }
-      }
+      _popRoute(route);
     }
   }
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    routes.add(route);
     if (route is R && previousRoute is R) {
-      final Set<RouteAware>? previousSubscribers = _listeners[previousRoute];
+      _pushRoute(route);
 
+      final Set<RouteAware>? previousSubscribers = _listeners[previousRoute];
       if (previousSubscribers != null) {
         for (final RouteAware routeAware in previousSubscribers) {
           routeAware.didPushNext(route);
+        }
+      }
+    }
+  }
+
+  _popRoute(Route<dynamic> route){
+    final List<RouteAware>? subscribers = _listeners[route]?.toList();
+
+    if (subscribers != null) {
+      for (final RouteAware routeAware in subscribers) {
+        routeAware.didPop();
+      }
+    }
+  }
+
+  _pushRoute(Route<dynamic> route){
+    final List<RouteAware>? subscribers = _listeners[route]?.toList();
+
+    if (subscribers != null) {
+      for (final RouteAware routeAware in subscribers) {
+        routeAware.didPush();
+      }
+    }
+  }
+
+  @override
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    if(oldRoute != null){
+      routes.remove(oldRoute);
+      _popRoute(oldRoute);
+    }
+
+    if(newRoute != null) {
+      routes.add(newRoute);
+      _pushRoute(newRoute);
+    }
+  }
+
+  @override
+  void didRemove(Route route, Route? previousRoute) {
+    routes.remove(route);
+    _popRoute(route);
+    if(routes.isNotEmpty && routes.last == previousRoute){
+      if (route is R && previousRoute is R) {
+        final List<RouteAware>? previousSubscribers = _listeners[previousRoute]?.toList();
+
+        if (previousSubscribers != null) {
+          for (final RouteAware routeAware in previousSubscribers) {
+            routeAware.didPopNext(route);
+          }
         }
       }
     }

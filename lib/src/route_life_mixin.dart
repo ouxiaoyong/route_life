@@ -18,8 +18,9 @@ mixin RouteLifeMixin<T extends StatefulWidget> on State<T>{
 
   void _subscribe(){
     _routeObserver = Navigator.of(context,rootNavigator: true).widget.observers.firstWhere((element) => element is RouteLifeObserver) as RouteLifeObserver;
-    route = ModalRoute.of(context)!;
-    _routeObserver?.subscribe(_awareImp, route!);
+    ModalRoute route = ModalRoute.of(context)!;
+    this.route = route;
+    _routeObserver?.subscribe(_awareImp, route);
   }
 
   void _unsubscribe(){
